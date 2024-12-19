@@ -13,25 +13,30 @@ from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 # Basic logging configuration
 logging.basicConfig(level=logging.INFO)
 
-
 # Function to load configuration from a YAML file
 def load_config(file_path):
     with open(file_path, 'r') as file:
         config = yaml.safe_load(file)
     return config
 
-
 # Function to connect based on database type
 def connect_to_database(config, db_type):
     connection_details = config['connection'] if 'connection' in config else config
     if db_type == 'postgres' or db_type == 'redshift':
-        return psycopg2.connect(
-            host=connection_details['host'],
-            port=connection_details['port'],
-            user=connection_details['username'],
-            password=connection_details['password'],
-            dbname=connection_details['database']
-        )
+        # For Redshift, the port is excluded
+        connection_params = {
+            'host': connection_details['host'],
+            'user': connection_details['username'],
+            'password': connection_details['password'],
+            'dbname': connection_details['database']
+        }
+        if db_type == 'postgres':
+            connection_params['port'] = connection_details['port']
+
+        if db_type == 'redshift':
+            connection_params['port'] = '5439'
+
+        return psycopg2.connect(**connection_params)
     elif db_type == 'sqlserver':
         connection_string = (
             f"DRIVER={{ODBC Driver 18 for SQL Server}};"
@@ -68,7 +73,6 @@ def connect_to_database(config, db_type):
         )
     else:
         raise ValueError(f"Unsupported database type: {db_type}")
-
 
 # Function to fetch information schema based on the database type
 def fetch_information_schema(connection, db_type, schema_name, output_file, catalog=None):
@@ -124,7 +128,6 @@ def fetch_information_schema(connection, db_type, schema_name, output_file, cata
 
     cursor.close()
 
-
 # Main function to execute the script
 def generate_schema_files(config_folder_path):
     # Iterate through each YAML file in the folder
@@ -140,7 +143,7 @@ def generate_schema_files(config_folder_path):
                 if isinstance(data_source_value, dict) and 'type' in data_source_value and 'schema' in data_source_value:
                     db_type = data_source_value['type']
                     schema_name = data_source_value['schema']
-                    catalog = data_source_value.get('connection', {}).get('catalog', 'hive_metastore')
+                    catalog = data_source_value.get('catalog', 'unity_catalog')
 
                     # Connect to the correct database based on the type
                     connection = connect_to_database(data_source_value, db_type)
@@ -149,4 +152,3 @@ def generate_schema_files(config_folder_path):
                     output_file = f"{schema_name}_schema_information.csv"
                     if connection:
                         fetch_information_schema(connection, db_type, schema_name, output_file, catalog)
-                        connection.close()

@@ -1,0 +1,31 @@
+checks for yellow_trip:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(vendor_id) = 0
+  - missing_count(pickup_datetime) = 0
+  - missing_count(dropoff_datetime) = 0
+  - missing_count(passenger_count) = 0
+  - missing_count(trip_distance) = 0
+  - missing_count(pickup_longitude) = 0
+  - missing_count(pickup_latitude) = 0
+  - missing_count(rate_code_id) = 0
+  - missing_count(store_and_fwd_flag) = 0
+  - missing_count(dropoff_longitude) = 0
+  - missing_count(dropoff_latitude) = 0
+  - missing_count(payment_type) = 0
+  - missing_count(fare_amount) = 0
+  - missing_count(extra) = 0
+  - missing_count(mta_tax) = 0
+  - missing_count(tip_amount) = 0
+  - missing_count(tolls_amount) = 0
+  - missing_count(total_amount) = 0
