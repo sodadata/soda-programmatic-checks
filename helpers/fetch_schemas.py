@@ -21,51 +21,17 @@ def load_config(file_path):
     return config
 
 
-# Function to connect to Redshift using AWS credentials and role ARN
-def connect_to_redshift_with_aws(config):
-    # access_key_id = config['access_key_id']
-    # secret_access_key = config['secret_access_key']
-    # role_arn = config['role_arn']
-    region = config['region']
-    host = config['host']
-    dbname = config['database']
-    username = config['username']
-    password = config['password']
-
-    # Initialize a boto3 session using the provided AWS credentials
-    try:
-
-        # Create a Redshift connection using temporary credentials
-        conn = psycopg2.connect(
-            host=host,
-            dbname=dbname,
-            user=username,
-            password=password,
-            sslmode='require',
-            port='5439'
-        )
-        return conn
-
-    except (NoCredentialsError, PartialCredentialsError) as e:
-        raise ValueError(f"AWS credentials error: {e}")
-    except Exception as e:
-        raise ValueError(f"Error connecting to Redshift: {e}")
-
-
 # Function to connect based on database type
 def connect_to_database(config, db_type):
     connection_details = config['connection'] if 'connection' in config else config
     if db_type == 'postgres' or db_type == 'redshift':
-        if db_type == 'redshift':
-            return connect_to_redshift_with_aws(config)  # Handle Redshift with AWS credentials
-        else:
-            return psycopg2.connect(
-                host=connection_details['host'],
-                port=connection_details['port'],
-                user=connection_details['username'],
-                password=connection_details['password'],
-                dbname=connection_details['database']
-            )
+        return psycopg2.connect(
+            host=connection_details['host'],
+            port=connection_details['port'],
+            user=connection_details['username'],
+            password=connection_details['password'],
+            dbname=connection_details['database']
+        )
     elif db_type == 'sqlserver':
         connection_string = (
             f"DRIVER={{ODBC Driver 18 for SQL Server}};"
@@ -89,12 +55,14 @@ def connect_to_database(config, db_type):
             session_parameters=connection_details.get('session_parameters', {})
         )
     elif db_type == 'bigquery':
-        return bigquery.Client.from_service_account_json(connection_details['account_info_json'],
-                                                         project=connection_details['project_id'])
+        return bigquery.Client.from_service_account_json(
+            connection_details['account_info_json'],
+            project=connection_details['project_id']
+        )
     elif db_type == 'spark':
         return databricks.sql.connect(
             server_hostname=connection_details['host'],
-            http_path=connection_details['http_path'],  # Specific to Databricks SQL
+            http_path=connection_details['http_path'],
             access_token=connection_details['token'],
             catalog=connection_details['catalog']
         )
@@ -103,7 +71,7 @@ def connect_to_database(config, db_type):
 
 
 # Function to fetch information schema based on the database type
-def fetch_information_schema(connection, db_type, schema_name, output_file):
+def fetch_information_schema(connection, db_type, schema_name, output_file, catalog=None):
     if db_type == 'postgres' or db_type == 'redshift':
         query = f"""
         SELECT table_name, table_schema, column_name, data_type
@@ -118,21 +86,23 @@ def fetch_information_schema(connection, db_type, schema_name, output_file):
         """
     elif db_type == 'snowflake':
         query = f"""
-               SELECT table_name, table_schema, column_name, data_type
-               FROM information_schema.columns
-               WHERE table_schema = '{schema_name}'
-               """
+        SELECT table_name, table_schema, column_name, data_type
+        FROM information_schema.columns
+        WHERE table_schema = '{schema_name}'
+        """
     elif db_type == 'bigquery':
         query = f"""
         SELECT table_name, table_schema, column_name, data_type
         FROM `{schema_name}.INFORMATION_SCHEMA.COLUMNS`
         """
     elif db_type == 'spark':
+        if not catalog:
+            raise ValueError("Catalog is required for Spark connections.")
         query = f"""
-                       SELECT table_name, table_schema, column_name, data_type
-                       FROM information_schema.columns
-                       WHERE table_schema = '{schema_name}'
-                       """
+        SELECT table_name, table_schema, column_name, data_type
+        FROM {catalog}.information_schema.columns
+        WHERE table_schema = '{schema_name}'
+        """
     else:
         raise ValueError(f"Unsupported database type: {db_type}")
 
@@ -167,16 +137,16 @@ def generate_schema_files(config_folder_path):
 
             # Iterate through all keys and look for the ones with type and schema
             for data_source_key, data_source_value in config.items():
-                if isinstance(data_source_value,
-                              dict) and 'type' in data_source_value and 'schema' in data_source_value:
+                if isinstance(data_source_value, dict) and 'type' in data_source_value and 'schema' in data_source_value:
                     db_type = data_source_value['type']
                     schema_name = data_source_value['schema']
+                    catalog = data_source_value.get('connection', {}).get('catalog', 'hive_metastore')
 
                     # Connect to the correct database based on the type
                     connection = connect_to_database(data_source_value, db_type)
 
                     # Generate a CSV file for each schema (named based on the schema name or config file name)
-                    output_file = f"{schema_name}_schema_information.csv"  # You can customize this naming convention
+                    output_file = f"{schema_name}_schema_information.csv"
                     if connection:
-                        fetch_information_schema(connection, db_type, schema_name, output_file)
+                        fetch_information_schema(connection, db_type, schema_name, output_file, catalog)
                         connection.close()

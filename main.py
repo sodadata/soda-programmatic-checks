@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # Build check files
     process_csv_files(folder_path="./input_schemas",process_method=yaml_creator.create_soda_check_files)
 
-    # # Run scans
+    # Run scans
     checks_folder = './checks'  # Provide the full path to the 'checks' folder here
     execute_checks_method(checks_folder)
 
