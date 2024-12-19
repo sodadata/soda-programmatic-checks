@@ -1,0 +1,17 @@
+# Please find all supported data sources on the Soda Docs: https://docs.soda.io/soda/connect-athena.html
+
+data_source XXXX:
+  type: postgres
+  connection:
+    host: XXXX
+    port: XXXX
+    username: XXXX
+    password: XXXX
+    database: XXXX
+  schema: XXXX
+
+soda_cloud:
+  host: cloud.soda.io # or cloud.us.soda.io
+  api_key_id: XXXX
+  api_key_secret: XXXX
+

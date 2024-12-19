@@ -44,3 +44,8 @@ coverage.xml
 # System-specific files
 .DS_Store
 Thumbs.db
+
+# Configuration files with credentials
+/configs/soda_library_configs
+/configs/soda_scaler_configs
+

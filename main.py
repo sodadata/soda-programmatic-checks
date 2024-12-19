@@ -1,16 +1,46 @@
-# This is a sample Python script.
+import logging
+import os
+import glob
+from helpers import soda_scan
+from helpers import yaml_creator
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+# Basic logging configuration
+logging.basicConfig(level=logging.INFO)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+def process_csv_files(folder_path, process_method):
+    # Get a list of all CSV files in the folder
+    csv_files = glob.glob(os.path.join(folder_path, '*.csv'))
 
+    # Loop over each CSV file
+    for csv_file in csv_files:
+        # Call the provided method on the file path
+        process_method(csv_file)
 
-# Press the green button in the gutter to run the script.
+def execute_checks_method(checks_folder):
+    # Iterate through each subfolder in 'checks'
+    for schema_name in os.listdir(checks_folder):
+        schema_folder = os.path.join(checks_folder, schema_name)
+
+        # Only process if it's a directory (schema folder)
+        if os.path.isdir(schema_folder):
+            logging.info("Running Soda scans for data source: " + schema_name)
+            # Call your method here with the data source name (schema name) and the schema folder path
+            soda_scan.run_soda_scan(data_source_name=schema_name, config_folder="./configs/soda_library_configs",
+                                    checks_folder=schema_folder, local=True)
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    logging.info("STARTING SODA SCALER")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # Get schemas from DB
+    # hard-coded to one input schema extracted from our demo postgres now
+
+    # Build check files
+    process_csv_files(folder_path="./input_schemas",process_method=yaml_creator.create_soda_check_files)
+
+    # Run scans
+    checks_folder = './checks'  # Provide the full path to the 'checks' folder here
+    execute_checks_method(checks_folder)
+
+    logging.info("SODA SCALER ENDED!")
+
