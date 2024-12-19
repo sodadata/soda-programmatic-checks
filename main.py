@@ -4,6 +4,8 @@ import glob
 from helpers import soda_scan
 from helpers import yaml_creator
 from helpers import fetch_schemas
+import time
+
 
 #TODO
 # add variables to scaler config
@@ -33,6 +35,8 @@ def execute_checks_method(checks_folder):
                                     checks_folder=schema_folder, local=False)
 
 if __name__ == '__main__':
+    start_time = time.time()  # Record the start time
+
     logging.info("STARTING SODA SCALER")
 
     # Get schemas from DB
@@ -47,6 +51,17 @@ if __name__ == '__main__':
     execute_checks_method(checks_folder)
 
     logging.info("SODA SCALER ENDED!")
+
+    end_time = time.time()  # Record the end time
+    run_time = end_time - start_time  # Calculate the difference
+
+    # Check if run time is greater than or equal to 1 minute
+    if run_time >= 60:
+        minutes = run_time // 60
+        seconds = run_time % 60
+        logging.info(f"Soda Scaler took {int(minutes)} minute(s) and {seconds:.4f} second(s) to run.")
+    else:
+        logging.info(f"Soda Scaler took {run_time:.4f} seconds to run.")
 
 
 
