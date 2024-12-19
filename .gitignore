@@ -49,5 +49,5 @@ Thumbs.db
 /configs/soda_library_configs
 /configs/soda_scaler_configs
 
-/checks/
-/input_schemas/
+/checks/*
+/input_schemas/*
