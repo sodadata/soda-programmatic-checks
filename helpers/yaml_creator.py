@@ -3,9 +3,12 @@ import logging
 import os
 from collections import defaultdict
 
+#TODO
+# add row count anomaly detection
+# add freshness when we figured out partitioning
+
 # Basic logging configuration
 logging.basicConfig(level=logging.INFO)
-
 
 def create_soda_check_files(file_path):
     # Initialize a dictionary to hold table-specific data
@@ -65,7 +68,7 @@ def build_yaml(table_name, columns, schema_name):
     os.makedirs(subfolder_path, exist_ok=True)
 
     # Generate the filename without the timestamp
-    yaml_file_name = f"{subfolder_path}/{schema_name}.{table_name}.yaml"
+    yaml_file_name = f"{subfolder_path}/{table_name}.yaml"
 
     # Save the YAML content to a file, replacing it if it exists
     with open(yaml_file_name, 'w') as yaml_file:

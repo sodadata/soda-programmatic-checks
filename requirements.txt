@@ -1,0 +1,12 @@
+-i https://pypi.cloud.soda.io
+
+PyYAML==6.0.2
+soda==1.8.9
+soda-bigquery==1.8.9
+soda-postgres==1.8.9
+soda-redshift==1.8.9
+soda-snowflake==1.8.9
+soda-spark==1.8.9
+soda-sqlserver==1.8.9
+
+pyodbc~=5.2.0

@@ -3,6 +3,11 @@ import os
 import glob
 from helpers import soda_scan
 from helpers import yaml_creator
+from helpers import fetch_schemas
+
+#TODO
+# add variables to scaler config
+
 
 # Basic logging configuration
 logging.basicConfig(level=logging.INFO)
@@ -27,20 +32,23 @@ def execute_checks_method(checks_folder):
             logging.info("Running Soda scans for data source: " + schema_name)
             # Call your method here with the data source name (schema name) and the schema folder path
             soda_scan.run_soda_scan(data_source_name=schema_name, config_folder="./configs/soda_library_configs",
-                                    checks_folder=schema_folder, local=True)
+                                    checks_folder=schema_folder, local=False)
 
 if __name__ == '__main__':
     logging.info("STARTING SODA SCALER")
 
     # Get schemas from DB
-    # hard-coded to one input schema extracted from our demo postgres now
+    config_folder_path = './configs/soda_library_configs'  # Path to the folder containing YAML config files
+    fetch_schemas.generate_schema_files(config_folder_path)
 
     # Build check files
     process_csv_files(folder_path="./input_schemas",process_method=yaml_creator.create_soda_check_files)
 
-    # Run scans
+    # # Run scans
     checks_folder = './checks'  # Provide the full path to the 'checks' folder here
     execute_checks_method(checks_folder)
 
     logging.info("SODA SCALER ENDED!")
+
+
 

@@ -1,8 +1,8 @@
 from soda.scan import Scan
 from datetime import datetime
 
-# TODO:
-# - add support for partitioning
+#TODO:
+# add support for partitioning
 
 
 def run_soda_scan(data_source_name,config_folder,checks_folder,local):
