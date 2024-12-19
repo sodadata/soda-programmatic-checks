@@ -1,0 +1,15 @@
+checks for categories:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(category_id) = 0
+  - missing_count(category_name) = 0

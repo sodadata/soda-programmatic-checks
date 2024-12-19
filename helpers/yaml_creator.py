@@ -3,12 +3,14 @@ import logging
 import os
 from collections import defaultdict
 
-#TODO
-# add row count anomaly detection
-# add freshness when we figured out partitioning
-
 # Basic logging configuration
 logging.basicConfig(level=logging.INFO)
+
+def escape_column_name(column_name):
+    """Escapes column names with special characters."""
+    if any(char in column_name for char in [' ', '&', ':', '{', '}', '[', ']', ',', '*', '#']):
+        return f'"{column_name}"'
+    return column_name
 
 def create_soda_check_files(file_path):
     # Initialize a dictionary to hold table-specific data
@@ -34,7 +36,6 @@ def create_soda_check_files(file_path):
     for table_name, data in table_data.items():
         build_yaml(table_name, data['columns'], data['schema'])
 
-
 def build_yaml(table_name, columns, schema_name):
     # Prepare the checks YAML content
     checks_content = []
@@ -44,23 +45,28 @@ def build_yaml(table_name, columns, schema_name):
     checks_content.append("")  # Add a blank line after the header
 
     # Add schema check
-    checks_content.append("  - schema:")
-    checks_content.append("      name: Any schema changes")
-    checks_content.append("      warn:")
-    checks_content.append("        when schema changes:")
-    checks_content.append("          - column delete")
-    checks_content.append("          - column add")
-    checks_content.append("          - column index change")
-    checks_content.append("          - column type change")
-    checks_content.append("")  # Add a blank line after schema check
+    checks_content.extend([
+        "  - schema:",
+        "      name: Any schema changes",
+        "      warn:",
+        "        when schema changes:",
+        "          - column delete",
+        "          - column add",
+        "          - column index change",
+        "          - column type change",
+        ""
+    ])
 
     # Add row count check
-    checks_content.append("  - row_count > 0")
-    checks_content.append("")  # Add a blank line after row count check
+    checks_content.extend([
+        "  - row_count > 0",
+        ""
+    ])
 
     # Add missing value checks for each column
     for column in columns:
-        checks_content.append(f"  - missing_count({column}) = 0")
+        escaped_column = escape_column_name(column)
+        checks_content.append(f"  - missing_count({escaped_column}) = 0")
     checks_content.append("")  # Add a blank line after the missing value checks
 
     # Create directory structure based on schema
@@ -72,7 +78,6 @@ def build_yaml(table_name, columns, schema_name):
 
     # Save the YAML content to a file, replacing it if it exists
     with open(yaml_file_name, 'w') as yaml_file:
-        # Write the content as a plain text to maintain the blank lines and structure
         yaml_file.write("\n".join(checks_content))
 
     logging.info(f"Generated/Updated {yaml_file_name} with checks for {table_name}")

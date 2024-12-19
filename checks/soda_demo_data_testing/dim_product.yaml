@@ -1,0 +1,49 @@
+checks for dim_product:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(product_key) = 0
+  - missing_count(product_subcategory_key) = 0
+  - missing_count(standard_cost) = 0
+  - missing_count(finished_goods_flag) = 0
+  - missing_count(safety_stock_level) = 0
+  - missing_count(reorder_point) = 0
+  - missing_count(list_price) = 0
+  - missing_count(weight) = 0
+  - missing_count(days_to_manufacture) = 0
+  - missing_count(dealer_price) = 0
+  - missing_count(large_photo) = 0
+  - missing_count(start_date) = 0
+  - missing_count(end_date) = 0
+  - missing_count(product_alternate_key) = 0
+  - missing_count(weight_unit_measure_code) = 0
+  - missing_count(size_unit_measure_code) = 0
+  - missing_count(english_product_name) = 0
+  - missing_count(spanish_product_name) = 0
+  - missing_count(french_product_name) = 0
+  - missing_count(color) = 0
+  - missing_count(size) = 0
+  - missing_count(size_range) = 0
+  - missing_count(product_line) = 0
+  - missing_count(class) = 0
+  - missing_count(style) = 0
+  - missing_count(model_name) = 0
+  - missing_count(english_description) = 0
+  - missing_count(french_description) = 0
+  - missing_count(chinese_description) = 0
+  - missing_count(arabic_description) = 0
+  - missing_count(hebrew_description) = 0
+  - missing_count(thai_description) = 0
+  - missing_count(german_description) = 0
+  - missing_count(japanese_description) = 0
+  - missing_count(turkish_description) = 0
+  - missing_count(status) = 0

@@ -1,0 +1,19 @@
+checks for order_items:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(order_id) = 0
+  - missing_count(product_id) = 0
+  - missing_count(quantity) = 0
+  - missing_count(order_item_id) = 0
+  - missing_count(list_price) = 0
+  - missing_count(discount) = 0

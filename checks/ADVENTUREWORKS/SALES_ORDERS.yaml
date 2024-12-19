@@ -1,0 +1,39 @@
+checks for SALES_ORDERS:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(SHIP_DATE_KEY) = 0
+  - missing_count(DUE_DATE_KEY) = 0
+  - missing_count(UNIT_PRICE) = 0
+  - missing_count(SALES_ORDER_NUMBER) = 0
+  - missing_count(PRODUCT_KEY) = 0
+  - missing_count(ORDER_DATE_KEY) = 0
+  - missing_count(CURRENCY_KEY) = 0
+  - missing_count(SALES_TERRITORY_KEY) = 0
+  - missing_count(CUSTOMER_PO_NUMBER) = 0
+  - missing_count(UNIT_PRICE_DISCOUNT_PCT) = 0
+  - missing_count(SALES_AMOUNT) = 0
+  - missing_count(REVISION_NUMBER) = 0
+  - missing_count(PROMOTION_KEY) = 0
+  - missing_count(CARRIER_TRACKING_NUMBER) = 0
+  - missing_count(ORDER_DATE) = 0
+  - missing_count(TOTAL_PRODUCT_COST) = 0
+  - missing_count(CUSTOMER_KEY) = 0
+  - missing_count(TAX_AMT) = 0
+  - missing_count(EXTENDED_AMOUNT) = 0
+  - missing_count(PRODUCT_STANDARD_COST) = 0
+  - missing_count(ORDER_QUANTITY) = 0
+  - missing_count(SALES_ORDER_LINE_NUMBER) = 0
+  - missing_count(SHIP_DATE) = 0
+  - missing_count(DUE_DATE) = 0
+  - missing_count(DISCOUNT_AMOUNT) = 0
+  - missing_count(FREIGHT) = 0

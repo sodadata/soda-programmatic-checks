@@ -1,0 +1,22 @@
+checks for retail_products:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(amount_in_stock) = 0
+  - missing_count(manufacturer) = 0
+  - missing_count(product_category) = 0
+  - missing_count(product_id) = 0
+  - missing_count(product_name) = 0
+  - missing_count(size) = 0
+  - missing_count(weight) = 0
+  - missing_count(purchase_price) = 0
+  - missing_count(selling_price) = 0

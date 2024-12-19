@@ -1,0 +1,21 @@
+checks for stores:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(store_id) = 0
+  - missing_count(store_name) = 0
+  - missing_count(phone) = 0
+  - missing_count(email) = 0
+  - missing_count(street) = 0
+  - missing_count(city) = 0
+  - missing_count(state) = 0
+  - missing_count(zip_code) = 0

@@ -1,0 +1,37 @@
+checks for employee_info:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(Age) = 0
+  - missing_count(Attrition) = 0
+  - missing_count(BusinessTravel) = 0
+  - missing_count(Department) = 0
+  - missing_count(DistanceFromHome) = 0
+  - missing_count(Education) = 0
+  - missing_count(EducationField) = 0
+  - missing_count(EmployeeCount) = 0
+  - missing_count(EmployeeID) = 0
+  - missing_count(Gender) = 0
+  - missing_count(JobLevel) = 0
+  - missing_count(JobRole) = 0
+  - missing_count(MaritalStatus) = 0
+  - missing_count(MonthlyIncome) = 0
+  - missing_count(NumCompaniesWorked) = 0
+  - missing_count(Over18) = 0
+  - missing_count(PercentSalaryHike) = 0
+  - missing_count(StandardHours) = 0
+  - missing_count(StockOptionLevel) = 0
+  - missing_count(TotalWorkingYears) = 0
+  - missing_count(TrainingTimesLastYear) = 0
+  - missing_count(YearsAtCompany) = 0
+  - missing_count(YearsSinceLastPromotion) = 0
+  - missing_count(YearsWithCurrManager) = 0

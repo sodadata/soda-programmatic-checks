@@ -8,10 +8,8 @@ from helpers import fetch_schemas
 #TODO
 # add variables to scaler config
 
-
 # Basic logging configuration
 logging.basicConfig(level=logging.INFO)
-
 
 def process_csv_files(folder_path, process_method):
     # Get a list of all CSV files in the folder
@@ -31,7 +29,7 @@ def execute_checks_method(checks_folder):
         if os.path.isdir(schema_folder):
             logging.info("Running Soda scans for data source: " + schema_name)
             # Call your method here with the data source name (schema name) and the schema folder path
-            soda_scan.run_soda_scan(data_source_name=schema_name, config_folder="./configs/soda_library_configs",
+            soda_scan.run_soda_scan(data_source_name=schema_name.lower(), config_folder="./configs/soda_library_configs",
                                     checks_folder=schema_folder, local=False)
 
 if __name__ == '__main__':

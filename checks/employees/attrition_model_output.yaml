@@ -1,0 +1,17 @@
+checks for attrition_model_output:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(EmployeeID) = 0
+  - missing_count(Attrition) = 0
+  - missing_count(PartitionDate) = 0
+  - missing_count(Accuracy) = 0

@@ -1,0 +1,18 @@
+checks for prod_sales_summary:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(store_id) = 0
+  - missing_count(total_sales) = 0
+  - missing_count(average_order_value) = 0
+  - missing_count(total_orders) = 0
+  - missing_count(total_customers) = 0

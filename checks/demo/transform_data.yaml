@@ -1,0 +1,28 @@
+checks for transform_data:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(quantity) = 0
+  - missing_count(order_year) = 0
+  - missing_count(order_month) = 0
+  - missing_count(order_id) = 0
+  - missing_count(customer_id) = 0
+  - missing_count(customer_name) = 0
+  - missing_count(country_name) = 0
+  - missing_count(product_id) = 0
+  - missing_count(product_name) = 0
+  - missing_count(product_category) = 0
+  - missing_count(total_value) = 0
+  - missing_count(total_sales_value) = 0
+  - missing_count(total_sales_quantity) = 0
+  - missing_count(total_orders) = 0
+  - missing_count(order_date) = 0

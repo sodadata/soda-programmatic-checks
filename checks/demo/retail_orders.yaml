@@ -1,0 +1,27 @@
+checks for retail_orders:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(order_quantity) = 0
+  - missing_count(order_id) = 0
+  - missing_count(product_id) = 0
+  - missing_count(customer_id) = 0
+  - missing_count(discount_currency) = 0
+  - missing_count(billing_address) = 0
+  - missing_count(shipping_address) = 0
+  - missing_count(payment_method) = 0
+  - missing_count(country_code) = 0
+  - missing_count(discount) = 0
+  - missing_count(total_order_value) = 0
+  - missing_count(order_date) = 0
+  - missing_count(ship_date) = 0
+  - missing_count(created_at) = 0

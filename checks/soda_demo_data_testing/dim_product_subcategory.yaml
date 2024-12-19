@@ -1,0 +1,19 @@
+checks for dim_product_subcategory:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(product_subcategory_alternate_key) = 0
+  - missing_count(product_subcategory_key) = 0
+  - missing_count(product_category_key) = 0
+  - missing_count(english_product_subcategory_name) = 0
+  - missing_count(spanish_product_subcategory_name) = 0
+  - missing_count(french_product_subcategory_name) = 0

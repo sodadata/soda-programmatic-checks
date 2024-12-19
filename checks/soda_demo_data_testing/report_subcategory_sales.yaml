@@ -1,0 +1,18 @@
+checks for report_subcategory_sales:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(category_key) = 0
+  - missing_count(subcategory_key) = 0
+  - missing_count(sales_count) = 0
+  - missing_count(sales_total) = 0
+  - missing_count(subcategory_name) = 0

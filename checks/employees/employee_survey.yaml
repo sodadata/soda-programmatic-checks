@@ -1,0 +1,17 @@
+checks for employee_survey:
+
+  - schema:
+      name: Any schema changes
+      warn:
+        when schema changes:
+          - column delete
+          - column add
+          - column index change
+          - column type change
+
+  - row_count > 0
+
+  - missing_count(EmployeeID) = 0
+  - missing_count(EnvironmentSatisfaction) = 0
+  - missing_count(JobSatisfaction) = 0
+  - missing_count(WorkLifeBalance) = 0
