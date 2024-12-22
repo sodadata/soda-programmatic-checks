@@ -47,7 +47,7 @@ Thumbs.db
 
 # Configuration files with credentials
 /configs/soda_library_configs
-/configs/soda_scaler_configs
+/configs/soda_progammatic_checks_configs
 
 /checks/*
 /input_schemas/*

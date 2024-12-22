@@ -1,6 +1,7 @@
 -i https://pypi.cloud.soda.io
 
 PyYAML==6.0.2
+
 soda==1.8.9
 soda-bigquery==1.8.9
 soda-postgres==1.8.9

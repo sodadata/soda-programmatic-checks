@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/soda-scaler.iml" filepath="$PROJECT_DIR$/.idea/soda-scaler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../soda-programmatic-checks/.idea/soda-programmatic-checks.iml" filepath="$PROJECT_DIR$/../soda-programmatic-checks/.idea/soda-programmatic-checks.iml" />
     </modules>
   </component>
 </project>
